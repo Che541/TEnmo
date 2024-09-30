@@ -20,6 +20,8 @@ public interface TransferRepository extends JpaRepository <Transfer, Integer> {
         if(transfer.getTransferStatusId() != 1) {
             throw new DaoException("Only pending transfers can be approved.");
         }
+
+        transfer.setTransferStatusId(2);
         double exchangeAmount = transfer.getAmount();
         double fromStartingAmount = accountFrom.getBalance();
         double toStartingAmount = accountTo.getBalance();

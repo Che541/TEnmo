@@ -23,7 +23,7 @@ public class TransferStatusController {
 
     @GetMapping("/transferstatuses/{id}")
     public TransferStatus findById(@PathVariable int id) {
-        return transferStatusRepository.getOne(id);
+        return transferStatusRepository.findById(id);
     }
 
 

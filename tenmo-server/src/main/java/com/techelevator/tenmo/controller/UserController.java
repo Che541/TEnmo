@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -16,7 +17,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/users/{username}")
+    @GetMapping("/users/username/{username}")
     public User findUserByUsername(@PathVariable String username) {
         return userRepository.findUserByUsername(username);
     }
@@ -28,8 +29,17 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public User findUserById(@PathVariable int id) {
-        return userRepository.getOne(id);
+        return userRepository.findById(id).get();
     }
 
+
+    @GetMapping("/users/username/account/{id}")
+    public String findUsernameByAccountId(@PathVariable int id, Principal principal) {
+        String username = userRepository.findUsernameByAccountId(id);
+        if (principal.getName().equals(username)){
+            return "Me Myselfandi";
+        }
+        return username;
+    }
 
 }

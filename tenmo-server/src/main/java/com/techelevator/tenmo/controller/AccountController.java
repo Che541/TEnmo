@@ -26,7 +26,12 @@ public class AccountController {
 
     @GetMapping("/accounts/{id}")
     public Account findById(@PathVariable int id) {
-        return accountRepository.getOne(id);
+        return accountRepository.findById(id).get();
+    }
+
+    @GetMapping("/accounts/users/{userId}")
+    public Account findByUserId(@PathVariable int userId) {
+        return accountRepository.findAccountByUserId(userId);
     }
 
     @GetMapping("accounts/balance")

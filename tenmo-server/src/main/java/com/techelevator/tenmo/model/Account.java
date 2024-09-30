@@ -1,6 +1,6 @@
 package com.techelevator.tenmo.model;
 
-import net.minidev.json.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;

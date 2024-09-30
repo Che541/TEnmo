@@ -27,7 +27,7 @@ public class TransferTypeController {
     @GetMapping("/transfertypes/{id}")
     public TransferType findById(@PathVariable int id, Principal principal) {
         System.out.println(principal.getName());
-        return transferTypeRepository.getOne(id);
+        return transferTypeRepository.findById(id);
     }
 
     @RequestMapping(path = "/whoami")

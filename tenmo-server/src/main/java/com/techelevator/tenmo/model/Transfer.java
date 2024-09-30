@@ -8,8 +8,8 @@ import javax.validation.constraints.NotNull;
 public class Transfer {
 
     @Id
-    @Column(name = "transfer_id")
     @GeneratedValue (strategy = GenerationType.AUTO)
+    @Column(name = "transfer_id")
     private int id;
     @Column(name = "transfer_type_id")
     @NotNull

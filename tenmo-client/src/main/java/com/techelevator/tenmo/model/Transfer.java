@@ -1,16 +1,20 @@
 package com.techelevator.tenmo.model;
 
 public class Transfer {
-
-
     private int id;
     private int transferTypeId;
     private int transferStatusId;
     private int accountFrom;
     private int accountTo;
     private double amount;
-
-    public Transfer() {
+    
+    public Transfer(int id, int transferTypeId, int transferStatusId, int accountFrom, int accountTo, double amount) {
+        this.id = id;
+        this.transferTypeId = transferTypeId;
+        this.transferStatusId = transferStatusId;
+        this.accountFrom = accountFrom;
+        this.accountTo = accountTo;
+        this.amount = amount;
     }
 
     public Transfer(int transferTypeId, int transferStatusId, int accountFrom, int accountTo, double amount) {
@@ -19,6 +23,9 @@ public class Transfer {
         this.accountFrom = accountFrom;
         this.accountTo = accountTo;
         this.amount = amount;
+    }
+
+    public Transfer() {
     }
 
     public int getId() {
@@ -68,4 +75,7 @@ public class Transfer {
     public void setAmount(double amount) {
         this.amount = amount;
     }
+
+    
+
 }

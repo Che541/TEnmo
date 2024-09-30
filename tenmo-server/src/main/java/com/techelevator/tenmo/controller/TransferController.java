@@ -1,31 +1,20 @@
 package com.techelevator.tenmo.controller;
 
-import com.sun.xml.bind.v2.TODO;
 import com.techelevator.tenmo.dao.AccountRepository;
 import com.techelevator.tenmo.dao.TransferRepository;
 import com.techelevator.tenmo.dao.UserRepository;
 import com.techelevator.tenmo.exception.DaoException;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
-import com.techelevator.tenmo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.metamodel.Metamodel;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
 
 @RestController
 @PreAuthorize("isAuthenticated()")
@@ -37,6 +26,11 @@ public class TransferController {
     private UserRepository userRepository;
     @Autowired
     private AccountRepository accountRepository;
+
+    @GetMapping("/transfers/{id}")
+    public Transfer findById(@PathVariable int id) {
+        return transferRepository.findById(id).get();
+    }
 
     @GetMapping("/transfers/history")
     public List<Transfer> findHistory(Principal principal) {
@@ -93,17 +87,31 @@ public class TransferController {
         return transferRepository.approveTransfer(transfer, userAccount, accountTo, accountRepository);
     }
 
-    @PatchMapping("transfers/{id}/approve")
+    @PostMapping("transfers/{id}/approve")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Transfer decideTransfer(@PathVariable int id, Principal principal){
+    public Transfer approveTransfer(@PathVariable int id, Principal principal){
+        Transfer transfer = transferRepository.findById(id).get();
+        String currentUsername = principal.getName();
+        Account currentUserAccount = accountRepository.findAccountByUsername(currentUsername);
+        Account accountTo = accountRepository.findById(transfer.getAccountTo()).get();
+        if (currentUserAccount.getId() != transfer.getAccountFrom()){
+            throw new DaoException("Not authorized to approve this transfer request.");
+        }
+        return transferRepository.approveTransfer(transfer, currentUserAccount, accountTo, accountRepository);
+    }
+
+    @PostMapping ("transfers/{id}/reject")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Transfer rejectTransfer(@PathVariable int id, Principal principal){
         Transfer transfer = transferRepository.getOne(id);
+        transfer.setTransferStatusId(3);
         String currentUsername = principal.getName();
         Account currentUserAccount = accountRepository.findAccountByUsername(currentUsername);
         Account accountTo = accountRepository.getOne(transfer.getAccountTo());
         if (currentUserAccount.getId() != transfer.getAccountFrom()){
             throw new DaoException("Not authorized to approve this transfer request.");
         }
-        return transferRepository.approveTransfer(transfer, currentUserAccount, accountTo, accountRepository);
+        return transferRepository.save(transfer);
     }
 
 }

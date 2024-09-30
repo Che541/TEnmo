@@ -46,6 +46,13 @@ public class ConsoleService {
         System.out.println();
     }
 
+    public void printApproveOrRejectMenu(){
+        System.out.println("1: Approve");
+        System.out.println("2: Reject");
+        System.out.println("0: Don't approve or reject");
+        System.out.println("---------");
+    }
+
     public UserCredentials promptForCredentials() {
         String username = promptForString("Username: ");
         String password = promptForString("Password: ");
@@ -64,6 +71,17 @@ public class ConsoleService {
                 return Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a number.");
+            }
+        }
+    }
+
+    public double promptForDouble(String prompt) {
+        System.out.print(prompt);
+        while (true) {
+            try {
+                return Double.parseDouble(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a decimal number.");
             }
         }
     }
